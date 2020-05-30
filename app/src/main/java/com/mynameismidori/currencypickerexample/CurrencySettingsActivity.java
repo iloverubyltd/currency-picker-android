@@ -1,10 +1,12 @@
 package com.mynameismidori.currencypickerexample;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import android.preference.PreferenceManager;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.mynameismidori.currencypicker.CurrencyPicker;
 import com.mynameismidori.currencypicker.CurrencyPickerListener;
@@ -17,15 +19,17 @@ import java.util.HashSet;
 import java.util.List;
 
 
-public class CurrencySettingsActivity extends Activity {
+public class CurrencySettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new CurrencyPreferenceFragment()).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new CurrencyPreferenceFragment())
+                .commit();
     }
 
-    public static class CurrencyPreferenceFragment extends PreferenceFragment implements CurrencyPickerListener, SharedPreferences.OnSharedPreferenceChangeListener {
+    public static class CurrencyPreferenceFragment extends PreferenceFragmentCompat implements CurrencyPickerListener, SharedPreferences.OnSharedPreferenceChangeListener {
         SharedPreferences preferences;
         private CurrencyPicker mCurrencyPicker;
         private CurrencyPreference currencyPreference;
@@ -37,6 +41,10 @@ public class CurrencySettingsActivity extends Activity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+        }
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.preferences);
             preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             currencyPreference = (CurrencyPreference) findPreference("selectedCurrency");

@@ -2,7 +2,7 @@ package com.mynameismidori.currencypickerexample;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 
 public class MainActivity extends FragmentActivity {
     private CurrencyFragment currencyFragment;

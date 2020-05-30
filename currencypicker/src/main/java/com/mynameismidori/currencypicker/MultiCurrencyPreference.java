@@ -1,12 +1,10 @@
 package com.mynameismidori.currencypicker;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.preference.MultiSelectListPreference;
-import android.preference.PreferenceManager;
+import androidx.preference.MultiSelectListPreference;
+import androidx.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -16,6 +14,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,6 @@ public class MultiCurrencyPreference extends MultiSelectListPreference {
         editor = preferences.edit();
     }
 
-    @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         Log.v("VALUES", getValues().toString());
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -93,11 +92,10 @@ public class MultiCurrencyPreference extends MultiSelectListPreference {
         }
     }
 
-    @Override
     protected void onDialogClosed(boolean positiveResult) {
         editor.putStringSet(getKey(), getValues());
         editor.commit();
-        super.onDialogClosed(positiveResult);
+        // super.onDialogClosed(positiveResult);
     }
 
     @SuppressLint("DefaultLocale")

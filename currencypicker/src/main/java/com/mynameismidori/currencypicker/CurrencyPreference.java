@@ -1,23 +1,23 @@
 package com.mynameismidori.currencypicker;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.preference.ListPreference;
-import android.preference.PreferenceManager;
+import androidx.preference.ListPreference;
+import androidx.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -75,7 +75,6 @@ public class CurrencyPreference extends ListPreference implements SharedPreferen
         }
     }
 
-    @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -119,7 +118,7 @@ public class CurrencyPreference extends ListPreference implements SharedPreferen
                 setSummary(currency.getCode());
                 editor.putString(getKey(), currency.getCode());
                 editor.commit();
-                getDialog().dismiss();
+                // FIXME getDialog().dismiss();
             }
         });
 
