@@ -32,33 +32,35 @@ class CurrencyPicker : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.currency_picker, null)
-        val args = arguments
-        if (args != null && dialog != null) {
-            val dialogTitle = args.getString("dialogTitle")
-            dialog!!.setTitle(dialogTitle)
-            val width = resources.getDimensionPixelSize(R.dimen.cp_dialog_width)
-            val height = resources.getDimensionPixelSize(R.dimen.cp_dialog_height)
-            dialog!!.window!!.setLayout(width, height)
+        arguments?.let { args ->
+            dialog?.let {
+                it.setTitle(args.getString("dialogTitle"))
+                it.window!!.setLayout(
+                    resources.getDimensionPixelSize(R.dimen.cp_dialog_width),
+                    resources.getDimensionPixelSize(R.dimen.cp_dialog_height)
+                )
+            }
         }
-        searchEditText =
-            view.findViewById<View>(R.id.currency_code_picker_search) as EditText
-        currencyListView =
-            view.findViewById<View>(R.id.currency_code_picker_listview) as ListView
-        selectedCurrenciesList = ArrayList(currenciesList.size)
-        selectedCurrenciesList.addAll(currenciesList)
+
+        val view = inflater.inflate(R.layout.currency_picker, null).also {
+            searchEditText = it.findViewById<EditText>(R.id.currency_code_picker_search)
+            currencyListView = it.findViewById<ListView>(R.id.currency_code_picker_listview)
+        }
+        searchEditText.doAfterTextChanged { text -> search(text.toString()) }
+
+        selectedCurrenciesList = arrayListOf<ExtendedCurrency>().apply { addAll(currenciesList) }
+
         adapter = CurrencyListAdapter(requireActivity(), selectedCurrenciesList)
         currencyListView.adapter = adapter
         currencyListView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
-            if (listener != null) {
+            listener?.let {
                 val currency = selectedCurrenciesList[position]
-                listener!!.onSelectCurrency(
+                it.onSelectCurrency(
                     currency.name, currency.code, currency.symbol,
                     currency.flag
                 )
             }
         }
-        searchEditText.doAfterTextChanged { text -> search(text.toString()) }
 
         return view
     }
@@ -67,7 +69,7 @@ class CurrencyPicker : DialogFragment() {
         if (dialog != null) {
             super.dismiss()
         } else {
-            requireFragmentManager().popBackStack()
+            parentFragmentManager.popBackStack()
         }
     }
 
@@ -75,7 +77,6 @@ class CurrencyPicker : DialogFragment() {
         this.listener = listener
     }
 
-    @SuppressLint("DefaultLocale")
     private fun search(text: String) {
         selectedCurrenciesList.clear()
         for (currency in currenciesList) {

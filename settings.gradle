@@ -1,1 +1,1 @@
-include ':app', ':currencypicker'
+include ':currencypicker', ':example', ':example-java'

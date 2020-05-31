@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
+import androidx.core.content.getSystemService
 import androidx.core.widget.doAfterTextChanged
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceManager
@@ -26,17 +27,20 @@ open class CurrencyPreference(
     context: Context,
     attrs: AttributeSet?
 ) : ListPreference(context, attrs), OnSharedPreferenceChangeListener {
-    private var searchEditText: EditText? = null
-    private var currencyListView: ListView? = null
+
+    private lateinit var searchEditText: EditText
+    private lateinit var currencyListView: ListView
+
     private var currencyName: Array<CharSequence>? = null
     private var currencyCode: Array<CharSequence>? = null
-    private var adapter: CurrencyListAdapter? = null
+    private lateinit var adapter: CurrencyListAdapter
     private val currentIndex = 0
     private val currenciesList: MutableList<ExtendedCurrency> = arrayListOf()
     private var selectedCurrenciesList: MutableList<ExtendedCurrency> = arrayListOf()
     private val resources: Resources? = null
     private val selectedCurrencyCode: String? = null
     private var defaultCurrencyCode: String? = null
+
     var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     override fun onSharedPreferenceChanged(
@@ -57,19 +61,15 @@ open class CurrencyPreference(
     }
 
     protected fun onPrepareDialogBuilder(builder: AlertDialog.Builder) {
-        val inflater =
-            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.currency_picker, null)
-        searchEditText =
-            view.findViewById<View>(R.id.currency_code_picker_search) as EditText
-        currencyListView =
-            view.findViewById<View>(R.id.currency_code_picker_listview) as ListView
-        searchEditText!!.doAfterTextChanged { text -> search(text.toString()) }
+        val inflater:LayoutInflater? = context.getSystemService() ?: return
+        val view = inflater!!.inflate(R.layout.currency_picker, null).also {
+            searchEditText = it.findViewById<EditText>(R.id.currency_code_picker_search)
+            currencyListView = it.findViewById<ListView>(R.id.currency_code_picker_listview)
+        }
+        searchEditText.doAfterTextChanged { text -> search(text.toString()) }
 
-        val currencyListView =
-            view.findViewById<View>(R.id.currency_code_picker_listview) as ListView
-        selectedCurrenciesList = ArrayList(currenciesList.size)
-        selectedCurrenciesList.addAll(currenciesList)
+        selectedCurrenciesList = arrayListOf<ExtendedCurrency>().apply { addAll(currenciesList) }
+
         adapter = CurrencyListAdapter(context, selectedCurrenciesList)
         currencyListView.adapter = adapter
         currencyListView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
@@ -89,7 +89,6 @@ open class CurrencyPreference(
         check(!(currencyName == null || currencyCode == null || currencyCode!!.size != currencyName!!.size)) { "Preference requires an entries array and an entryValues array which are both the same length" }
     }
 
-    @SuppressLint("DefaultLocale")
     private fun search(text: String) {
         selectedCurrenciesList.clear()
         for (currency in currenciesList) {
@@ -97,7 +96,7 @@ open class CurrencyPreference(
                 selectedCurrenciesList.add(currency)
             }
         }
-        adapter!!.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
     fun setCurrenciesList(newCurrencies: List<ExtendedCurrency>) {

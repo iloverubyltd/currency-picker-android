@@ -12,6 +12,7 @@ class CurrencyListAdapter(
     private val mContext: Context,
     var currencies: MutableList<ExtendedCurrency>
 ) : BaseAdapter() {
+
     private var inflater: LayoutInflater = LayoutInflater.from(mContext)
 
     override fun getCount(): Int = currencies.size
@@ -43,8 +44,8 @@ class CurrencyListAdapter(
                 if (view == null) return null
                 return if (view.tag == null) {
                     val cell = Cell()
-                    cell.textView = view.findViewById<View>(R.id.row_title) as TextView
-                    cell.imageView = view.findViewById<View>(R.id.row_icon) as ImageView
+                    cell.textView = view.findViewById<TextView>(R.id.row_title)
+                    cell.imageView = view.findViewById<ImageView>(R.id.row_icon)
                     view.tag = cell
                     cell
                 } else {

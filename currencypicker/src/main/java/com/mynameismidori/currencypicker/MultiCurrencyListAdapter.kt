@@ -13,6 +13,7 @@ class MultiCurrencyListAdapter(
     var currencies: MutableList<ExtendedCurrency>,
     var selectedCurrencies: MutableSet<String?>
 ) : BaseAdapter(), CompoundButton.OnCheckedChangeListener {
+
     private var inflater: LayoutInflater
     private val checkedCurrencies: SparseBooleanArray = SparseBooleanArray(currencies.size)
 
