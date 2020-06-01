@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.mynameismidori.currencypicker.CurrencyPicker
-import com.mynameismidori.currencypicker.CurrencyPicker.Companion.newInstance
 import com.mynameismidori.currencypicker.CurrencyPickerListener
 import com.mynameismidori.currencypicker.ExtendedCurrency
 import com.mynameismidori.currencypicker.ExtendedCurrency.Companion.allCurrencies
@@ -27,9 +26,7 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
         get() = _binding!!
 
     private lateinit var currencyPicker: CurrencyPicker
-
-    private val preferences: SharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(context)
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +40,8 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        currencyPicker = newInstance("Select Currency")
+        preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        currencyPicker = CurrencyPicker.newInstance("Select Currency")
 
         binding.currencyPickerButton.setOnClickListener(this)
         binding.openFragment.setOnClickListener(this)

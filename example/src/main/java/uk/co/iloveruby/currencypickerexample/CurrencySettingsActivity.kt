@@ -5,7 +5,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager.getDefaultSharedPreferences
+import androidx.preference.PreferenceManager
 import com.mynameismidori.currencypicker.*
 import com.mynameismidori.currencypicker.CurrencyPicker.Companion.newInstance
 import com.mynameismidori.currencypicker.ExtendedCurrency.Companion.allCurrencies
@@ -26,17 +26,15 @@ class CurrencySettingsActivity : AppCompatActivity() {
     class CurrencyPreferenceFragment : PreferenceFragmentCompat(),
         CurrencyPickerListener, OnSharedPreferenceChangeListener {
 
-        private val preferences = getDefaultSharedPreferences(requireContext())
+        private lateinit var preferences: SharedPreferences
         private lateinit var currencyPicker: CurrencyPicker
         private lateinit var currencyPreference: CurrencyPreference
         private lateinit var multiSelectListPreference: MultiCurrencyPreference
 
-        override fun onCreatePreferences(
-            savedInstanceState: Bundle,
-            rootKey: String
-        ) {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.preferences)
 
+            preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
             currencyPreference = findPreference("selectedCurrency")!!
             currencyPreference.setCurrenciesList(
                 preferences.getStringSet(
