@@ -43,15 +43,14 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
         preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         currencyPicker = CurrencyPicker.newInstance("Select Currency")
 
-        binding.currencyPickerButton.setOnClickListener(this)
-        binding.openFragment.setOnClickListener(this)
-        binding.openPreferences.setOnClickListener(this)
+        binding.buttonCurrencyPicker.setOnClickListener(this)
+        binding.buttonOpenFragment.setOnClickListener(this)
+        binding.buttonOpenPreferences.setOnClickListener(this)
 
         preferences.registerOnSharedPreferenceChangeListener(this)
 
-        val selectedCurrency =
-            preferences.getString("selectedCurrency", getString(R.string.default_currency))
-        binding.textView3.text = selectedCurrency
+        val selectedCurrency = preferences.getString("selectedCurrency", getString(R.string.default_currency))
+        binding.selectedCurrencyPreferenceValue.text = selectedCurrency
         Toast.makeText(activity, selectedCurrency, Toast.LENGTH_LONG).show()
 
         // You can limit the displayed countries
@@ -79,7 +78,7 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
         key: String
     ) {
         if (key == "selectedCurrency") {
-            binding.textView3.text = sharedPreferences.getString(key, "")
+            binding.selectedCurrencyPreferenceValue.text = sharedPreferences.getString(key, "")
         }
         if (key == "selectedCurrencies") {
             currencyPicker.setCurrenciesList(
@@ -94,7 +93,7 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
     override fun onResume() {
         super.onResume()
         preferences.registerOnSharedPreferenceChangeListener(this)
-        binding.textView3.text = preferences.getString("selectedCurrency", "CZK")
+        binding.selectedCurrencyPreferenceValue.text = preferences.getString("selectedCurrency", "CZK")
     }
 
     override fun onPause() {
@@ -118,18 +117,19 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
     override fun onClick(v: View) {
         //do what you want to do when button is clicked
         when (v.id) {
-            R.id.currency_picker_button -> currencyPicker.show(
-                parentFragmentManager,
-                "CURRENCY_PICKER"
-            )
-            R.id.openPreferences -> {
-                val intent = Intent(
+            R.id.button_currency_picker -> {
+                currencyPicker.show(
+                    parentFragmentManager,
+                    "CURRENCY_PICKER"
+                )
+            }
+            R.id.button_open_preferences -> {
+                startActivity(Intent(
                     activity,
                     CurrencySettingsActivity::class.java
-                )
-                startActivity(intent)
+                ))
             }
-            R.id.openFragment -> {
+            R.id.button_open_fragment -> {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.container, currencyPicker, "currencyFragment")
                     .addToBackStack(null)

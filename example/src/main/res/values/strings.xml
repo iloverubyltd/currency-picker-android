@@ -3,4 +3,12 @@
     <string name="pick_currency">Pick Currency</string>
     <string name="default_currency">EUR</string>
     <string name="selected_currencies">Selected Currencies</string>
+    <string name="currency_name">Currency Name</string>
+    <string name="currency_iso_code">Currency ISO Code</string>
+    <string name="currency_symbol">Currency Symbol</string>
+    <string name="currency_flag">Currency Flag</string>
+    <string name="selected_currency_flag_image_view_content_desc">Flag of the nation/region associated with the CUrrency.</string>
+    <string name="selected_currency">Selected Currency</string>
+    <string name="button_open_preferences">Open Preferences</string>
+    <string name="button_open_fragment">Open Fragment</string>
 </resources>
