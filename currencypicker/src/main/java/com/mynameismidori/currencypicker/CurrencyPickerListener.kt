@@ -5,9 +5,9 @@ package com.mynameismidori.currencypicker
  */
 interface CurrencyPickerListener {
     fun onSelectCurrency(
-        name: String?,
-        code: String?,
-        symbol: String?,
+        name: String,
+        code: String,
+        symbol: String,
         flagDrawableResID: Int
     )
 }

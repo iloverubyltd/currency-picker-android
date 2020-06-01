@@ -4,25 +4,28 @@ import android.content.Context
 import java.util.*
 import kotlin.Comparator
 
-data class ExtendedCurrency(
-    var code: String? = null,
-    var name: String? = null,
-    var symbol: String? = null,
-    var flag: Int = -1
+class ExtendedCurrency(
+    val code: String,
+    val name: String,
+    val symbol: String,
+    flag: Int = -1
 ) {
+    private var _flag: Int = flag
+    val flag: Int
+        get() = _flag
 
     fun loadFlagByCode(context: Context) {
         if (flag != -1) return
         try {
-            flag = context.resources
+            _flag = context.resources
                 .getIdentifier(
-                    "flag_${code!!.toLowerCase(Locale.ROOT)}",
+                    "flag_${code.toLowerCase(Locale.ROOT)}",
                     "drawable",
                     context.packageName
                 )
         } catch (e: Exception) {
             e.printStackTrace()
-            flag = -1
+            _flag = -1
         }
     }
 
@@ -31,13 +34,13 @@ data class ExtendedCurrency(
      */
     class ISOCodeComparator : Comparator<ExtendedCurrency> {
         override fun compare(currency: ExtendedCurrency, t1: ExtendedCurrency): Int {
-            return currency.code!!.compareTo(t1.code!!)
+            return currency.code.compareTo(t1.code)
         }
     }
 
     class NameComparator : Comparator<ExtendedCurrency> {
         override fun compare(currency: ExtendedCurrency, t1: ExtendedCurrency): Int {
-            return currency.name!!.compareTo(t1.name!!)
+            return currency.name.compareTo(t1.name)
         }
     }
 

@@ -71,7 +71,7 @@ open class MultiCurrencyPreference(
     private fun search(text: String) {
         selectedCurrenciesList.clear()
         for (currency in currenciesList) {
-            if (currency.name!!.toLowerCase(Locale.ENGLISH)
+            if (currency.name.toLowerCase(Locale.ENGLISH)
                     .contains(text.toLowerCase(Locale.ENGLISH))
             ) {
                 selectedCurrenciesList.add(currency)

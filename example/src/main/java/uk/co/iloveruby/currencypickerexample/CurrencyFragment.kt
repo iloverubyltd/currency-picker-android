@@ -104,7 +104,9 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
     }
 
     override fun onSelectCurrency(
-        name: String?, code: String?, symbol: String?,
+        name: String,
+        code: String,
+        symbol: String,
         flagDrawableResID: Int
     ) {
         binding.run {
@@ -133,7 +135,7 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
             }
             R.id.button_open_fragment -> {
                 parentFragmentManager.commit {
-                    replace<CurrencyFragment>(R.id.fragment_container, "currency_fragment")
+                    replace(R.id.fragment_container, currencyPicker, "currency_picker_fragment")
                     addToBackStack(null)
                 }
             }

@@ -3,4 +3,10 @@
     <declare-styleable name="attrs_currency">
         <attr name="currencyCode" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="CurrencyPickerPreference">
+        <!-- Whether the preference should automatically set its summary to the value saved for the
+            preference, and update the summary when the value is changed. Defaults to false. -->
+        <attr name="useSimpleSummaryProvider" />
+    </declare-styleable>
 </resources>

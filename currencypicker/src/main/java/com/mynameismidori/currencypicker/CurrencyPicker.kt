@@ -1,6 +1,5 @@
 package com.mynameismidori.currencypicker
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -80,7 +79,9 @@ class CurrencyPicker : DialogFragment() {
     private fun search(text: String) {
         selectedCurrenciesList.clear()
         for (currency in currenciesList) {
-            if (currency.name!!.toLowerCase(Locale.ENGLISH).contains(text.toLowerCase(Locale.ENGLISH))) {
+            if (currency.name.toLowerCase(Locale.ENGLISH)
+                    .contains(text.toLowerCase(Locale.ENGLISH))
+            ) {
                 selectedCurrenciesList.add(currency)
             }
         }
@@ -104,10 +105,8 @@ class CurrencyPicker : DialogFragment() {
          * To support show as dialog
          */
         @JvmStatic
-        fun newInstance(dialogTitle: String?): CurrencyPicker {
-            return CurrencyPicker().apply {
-                arguments = bundleOf("dialogTitle" to dialogTitle)
-            }
+        fun newInstance(dialogTitle: String?): CurrencyPicker = CurrencyPicker().apply {
+            arguments = bundleOf("dialogTitle" to dialogTitle)
         }
     }
 

@@ -3,8 +3,10 @@ package uk.co.iloveruby.currencypickerexample
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commitNow
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.mynameismidori.currencypicker.*
@@ -34,7 +36,7 @@ class CurrencySettingsActivity : AppCompatActivity() {
 
         private lateinit var preferences: SharedPreferences
         private lateinit var currencyPicker: CurrencyPicker
-        private lateinit var currencyPreference: CurrencyPreference
+        private lateinit var currencyPreference: CurrencyPickerPreference
         private lateinit var multiSelectListPreference: MultiCurrencyPreference
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -42,12 +44,12 @@ class CurrencySettingsActivity : AppCompatActivity() {
 
             preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
             currencyPreference = findPreference("selectedCurrency")!!
-            currencyPreference.setCurrenciesList(
-                preferences.getStringSet(
-                    "selectedCurrencies",
-                    HashSet()
-                )!!
-            )
+//            currencyPreference.currenciesList = (
+//                preferences.getStringSet(
+//                    "selectedCurrencies",
+//                    HashSet()
+//                )!!
+//            )
             currencyPicker = newInstance("Select Currency")
             multiSelectListPreference = findPreference("selectedCurrencies")!!
 
@@ -88,26 +90,30 @@ class CurrencySettingsActivity : AppCompatActivity() {
             key: String
         ) {
             if (key == "selectedCurrencies") {
-                currencyPreference.setCurrenciesList(
-                    preferences.getStringSet(
-                        "selectedCurrencies",
-                        HashSet()
-                    )!!
-                )
+//                currencyPreference.setCurrenciesList(
+//                    preferences.getStringSet(
+//                        "selectedCurrencies",
+//                        HashSet()
+//                    )!!
+//                )
             }
         }
 
+        override fun onDisplayPreferenceDialog(preference: Preference) {
+            Log.d(TAG,"DISPLAY PREFERENCE DIALOG")
+        }
+
         override fun onSelectCurrency(
-            name: String?,
-            code: String?,
-            symbol: String?,
+            name: String,
+            code: String,
+            symbol: String,
             flagDrawableResID: Int
         ) {
             currencyPreference.value = code
         }
 
         companion object {
-            private const val TAG = "CurrencyPreference"
+            private const val TAG = "CurrencyPickerPreference"
 
             @JvmStatic @JvmOverloads
             fun newInstance(args: Bundle? = null) = CurrencyPreferenceFragment()
