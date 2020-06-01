@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.preference.PreferenceManager
 import com.mynameismidori.currencypicker.CurrencyPicker
 import com.mynameismidori.currencypicker.CurrencyPickerListener
@@ -130,10 +132,10 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
                 ))
             }
             R.id.button_open_fragment -> {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.container, currencyPicker, "currencyFragment")
-                    .addToBackStack(null)
-                    .commit()
+                parentFragmentManager.commit {
+                    replace<CurrencyFragment>(R.id.fragment_container, "currency_fragment")
+                    addToBackStack(null)
+                }
             }
         }
     }
@@ -148,5 +150,10 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
                 selectedCurrencyNameTextView.text = currency.name
             }
         }
+    }
+
+    companion object {
+        @JvmStatic @JvmOverloads
+        fun newInstance(args: Bundle? = null) = CurrencyFragment().apply { arguments = args }
     }
 }

@@ -11,4 +11,5 @@
     <string name="selected_currency">Selected Currency</string>
     <string name="button_open_preferences">Open Preferences</string>
     <string name="button_open_fragment">Open Fragment</string>
+    <string name="title_activity_currency_settings">Currency Settings</string>
 </resources>

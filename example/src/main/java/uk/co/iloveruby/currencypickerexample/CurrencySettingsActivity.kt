@@ -4,24 +4,30 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.commitNow
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.mynameismidori.currencypicker.*
 import com.mynameismidori.currencypicker.CurrencyPicker.Companion.newInstance
 import com.mynameismidori.currencypicker.ExtendedCurrency.Companion.allCurrencies
+import uk.co.iloveruby.currencypickerexample.databinding.ActivityMainBinding
 import java.util.*
 
 class CurrencySettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager.beginTransaction()
-            .replace(
-                android.R.id.content,
-                CurrencyPreferenceFragment()
-            )
-            .commit()
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.commitNow {
+                replace(R.id.fragment_container, CurrencyPreferenceFragment.newInstance())
+            }
+        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
+
 
     class CurrencyPreferenceFragment : PreferenceFragmentCompat(),
         CurrencyPickerListener, OnSharedPreferenceChangeListener {
@@ -102,6 +108,10 @@ class CurrencySettingsActivity : AppCompatActivity() {
 
         companion object {
             private const val TAG = "CurrencyPreference"
+
+            @JvmStatic @JvmOverloads
+            fun newInstance(args: Bundle? = null) = CurrencyPreferenceFragment()
+                .apply { arguments = args }
         }
     }
 }
