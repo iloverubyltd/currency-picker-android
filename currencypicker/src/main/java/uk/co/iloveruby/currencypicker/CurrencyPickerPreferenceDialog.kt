@@ -1,6 +1,7 @@
 package uk.co.iloveruby.currencypicker
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -38,20 +39,23 @@ class CurrencyPickerPreferenceDialog : PreferenceDialogFragmentCompat() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState != null) {
-            savedInstanceState.let { state ->
-                clickedDialogEntryIndex = state.getInt(SAVE_STATE_INDEX, 0)
-                _entries = state.getCharSequenceArray(SAVE_STATE_ENTRIES)!!
-                _entryValues = state.getCharSequenceArray(SAVE_STATE_ENTRY_VALUES)!!
-            }
-        } else {
+        if (savedInstanceState == null) {
             currencyPickerPreference.let {
                 check(it.entries != null && it.entryValues != null) {
                     "CurrencyPickerPreference requires an entries array and an entryValues array."
                 }
+
+                setCurrenciesList(ExtendedCurrency.getAllCurrencies());
+
                 clickedDialogEntryIndex = it.findIndexOfValue(it.value)
                 _entries = it.entries!!
                 _entryValues = it.entryValues!!
+            }
+        } else {
+            savedInstanceState.let { state ->
+                clickedDialogEntryIndex = state.getInt(SAVE_STATE_INDEX, 0)
+                _entries = state.getCharSequenceArray(SAVE_STATE_ENTRIES)!!
+                _entryValues = state.getCharSequenceArray(SAVE_STATE_ENTRY_VALUES)!!
             }
         }
     }
@@ -67,7 +71,6 @@ class CurrencyPickerPreferenceDialog : PreferenceDialogFragmentCompat() {
 
     override fun onCreateDialogView(context: Context?): View {
         binding = CurrencyPickerBinding.inflate(layoutInflater)
-
         return binding.root
     }
 
@@ -87,40 +90,20 @@ class CurrencyPickerPreferenceDialog : PreferenceDialogFragmentCompat() {
                 preference.sharedPreferences.edit(commit = true) {
                     putString(preference.key, currency.code)
                 }
+
+                // Clicking on an item simulates the positive button click, and dismisses
+                // the dialog.
+                this@CurrencyPickerPreferenceDialog.onClick(
+                    dialog,
+                    DialogInterface.BUTTON_POSITIVE
+                )
+                dialog?.dismiss()
             }
     }
 
-    // override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    //     val pref = currencyPickerPreference
-    //     val params =
-    //         ColorPickerDialog.Params.Builder(context)
-    //             .setSelectedColor(pref.color)
-    //             .setColors(pref.colors)
-    //             .setColorContentDescriptions(pref.colorDescriptions)
-    //             .setSize(pref.size)
-    //             .setSortColors(pref.isSortColors)
-    //             .setColumns(pref.columns)
-    //             .build()
-    //     val dialog = ColorPickerDialog(requireActivity(), this, params)
-    //     dialog.setTitle(pref.dialogTitle)
-    //     return dialog
-    // }
 
     override fun onPrepareDialogBuilder(builder: AlertDialog.Builder) {
         super.onPrepareDialogBuilder(builder)
-        builder.setSingleChoiceItems(
-            _entries, clickedDialogEntryIndex
-        ) { dialog, which ->
-            clickedDialogEntryIndex = which
-
-            // Clicking on an item simulates the positive button click, and dismisses
-            // the dialog.
-            this@CurrencyPickerPreferenceDialog.onClick(
-                dialog,
-                DialogInterface.BUTTON_POSITIVE
-            )
-            dialog.dismiss()
-        }
 
         // The typical interaction for list-based dialogs is to have click-on-an-item dismiss the
         // dialog instead of the user having to press 'Ok'.

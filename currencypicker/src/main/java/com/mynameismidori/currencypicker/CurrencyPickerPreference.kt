@@ -31,7 +31,7 @@ class CurrencyPickerPreference @JvmOverloads constructor(
 
     private var _summary: String? = null
     private var valueSet = false
-
+    
     var value: String = ""
         set(value) {
             val changed = !TextUtils.equals(field, value)
@@ -44,8 +44,9 @@ class CurrencyPickerPreference @JvmOverloads constructor(
         }
 
     init {
-
         dialogLayoutResource = R.layout.currency_picker
+        setCurrenciesList(ExtendedCurrency.allCurrencies);
+
         // _entries =
         // _entryValues =
 
