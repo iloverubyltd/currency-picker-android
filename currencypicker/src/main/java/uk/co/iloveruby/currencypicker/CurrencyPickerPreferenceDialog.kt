@@ -27,8 +27,8 @@ class CurrencyPickerPreferenceDialog : PreferenceDialogFragmentCompat() {
     private lateinit var _entries: Array<CharSequence>
     private lateinit var _entryValues: Array<CharSequence>
 
-    private val currenciesList: List<ExtendedCurrency> = ExtendedCurrency.allCurrencies
-    private var selectedCurrenciesList: MutableList<ExtendedCurrency> = mutableListOf()
+    val currenciesList: List<ExtendedCurrency> = ExtendedCurrency.allCurrencies
+    var selectedCurrenciesList: MutableList<ExtendedCurrency> = mutableListOf()
 
     private val currencyPickerPreference: CurrencyPickerPreference
         get() = preference as CurrencyPickerPreference
@@ -45,7 +45,8 @@ class CurrencyPickerPreferenceDialog : PreferenceDialogFragmentCompat() {
                     "CurrencyPickerPreference requires an entries array and an entryValues array."
                 }
 
-                setCurrenciesList(ExtendedCurrency.getAllCurrencies());
+                var foo = mutableListOf<String>()
+                foo.replaceAll(mutableListOf<String>())
 
                 clickedDialogEntryIndex = it.findIndexOfValue(it.value)
                 _entries = it.entries!!
@@ -122,8 +123,7 @@ class CurrencyPickerPreferenceDialog : PreferenceDialogFragmentCompat() {
 
     @SuppressLint("DefaultLocale")
     private fun search(text: String) {
-        selectedCurrenciesList.clear()
-        selectedCurrenciesList.addAll(currenciesList.filter { currency ->
+        selectedCurrenciesList.replaceAll(currenciesList.filter { currency ->
             currency.name.toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())
         })
         adapter.notifyDataSetChanged()
@@ -143,4 +143,9 @@ class CurrencyPickerPreferenceDialog : PreferenceDialogFragmentCompat() {
             }
         }
     }
+}
+
+fun <E> MutableList<E>.replaceAll(newCollection: Collection<E>) {
+    clear()
+    addAll(newCollection)
 }

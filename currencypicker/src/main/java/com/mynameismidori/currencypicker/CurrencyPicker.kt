@@ -12,6 +12,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import com.mynameismidori.currencypicker.ExtendedCurrency.Companion.allCurrencies
 import com.mynameismidori.currencypicker.ExtendedCurrency.Companion.getCurrencyByISO
+import uk.co.iloveruby.currencypicker.replaceAll
 import java.util.*
 
 class CurrencyPicker : DialogFragment() {
@@ -88,10 +89,8 @@ class CurrencyPicker : DialogFragment() {
         adapter.notifyDataSetChanged()
     }
 
-    fun setCurrenciesList(newCurrencies: List<ExtendedCurrency>) {
-        currenciesList.clear()
-        currenciesList.addAll(newCurrencies)
-    }
+    fun setCurrenciesList(newCurrencies: List<ExtendedCurrency>) =
+        currenciesList.replaceAll(newCurrencies)
 
     fun setCurrenciesList(savedCurrencies: Set<String>) {
         currenciesList.clear()

@@ -23,6 +23,9 @@ class CurrencyPickerPreference @JvmOverloads constructor(
     private var _entries: Array<CharSequence>? = null
     private var _entryValues: Array<CharSequence>? = null
 
+    private val currenciesList: MutableList<ExtendedCurrency> = arrayListOf()
+    private var selectedCurrenciesList: MutableList<ExtendedCurrency> = arrayListOf()
+
     val entries: Array<CharSequence>?
         get() = _entries
 
@@ -31,7 +34,7 @@ class CurrencyPickerPreference @JvmOverloads constructor(
 
     private var _summary: String? = null
     private var valueSet = false
-    
+
     var value: String = ""
         set(value) {
             val changed = !TextUtils.equals(field, value)
@@ -45,7 +48,8 @@ class CurrencyPickerPreference @JvmOverloads constructor(
 
     init {
         dialogLayoutResource = R.layout.currency_picker
-        setCurrenciesList(ExtendedCurrency.allCurrencies);
+
+        setCurrenciesList(ExtendedCurrency.allCurrencies)
 
         // _entries =
         // _entryValues =
@@ -88,6 +92,23 @@ class CurrencyPickerPreference @JvmOverloads constructor(
 
         return super.getSummary()
     }
+
+    fun setCurrenciesList(newCurrencies: List<ExtendedCurrency>) {
+        currenciesList.run {
+            clear()
+            addAll(newCurrencies)
+        }
+    }
+
+    fun setCurrenciesList(savedCurrencies: Set<String>) {
+        currenciesList.run {
+            clear()
+            addAll(
+                savedCurrencies.mapNotNull { code -> ExtendedCurrency.getCurrencyByISO(code) }
+            )
+        }
+    }
+
 
     @Suppress("unused")
     val entry: CharSequence?

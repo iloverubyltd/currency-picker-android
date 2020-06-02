@@ -15,6 +15,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.PreferenceManager
 import com.mynameismidori.currencypicker.ExtendedCurrency.Companion.allCurrencies
+import uk.co.iloveruby.currencypicker.replaceAll
 import java.util.*
 
 open class MultiCurrencyPreference(
@@ -80,8 +81,6 @@ open class MultiCurrencyPreference(
         adapter.notifyDataSetChanged()
     }
 
-    fun setCurrenciesList(newCurrencies: List<ExtendedCurrency>) {
-        currenciesList.clear()
-        currenciesList.addAll(newCurrencies)
-    }
+    fun setCurrenciesList(newCurrencies: List<ExtendedCurrency>) =
+        currenciesList.replaceAll(newCurrencies)
 }
