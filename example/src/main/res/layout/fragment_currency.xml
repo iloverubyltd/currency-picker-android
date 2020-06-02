@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="selectedCurrency"
-            type="com.mynameismidori.currencypicker.ExtendedCurrency" />
+            name="viewModel"
+            type="com.mynameismidori.currencypickerexample.CurrencyViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

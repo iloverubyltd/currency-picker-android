@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
 import com.mynameismidori.currencypicker.CurrencyPicker
 import com.mynameismidori.currencypicker.CurrencyPickerListener
@@ -27,6 +27,8 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
     private val binding: FragmentCurrencyBinding
         get() = _binding!!
 
+    private val viewModel: CurrencyViewModel by viewModels()
+
     private lateinit var currencyPicker: CurrencyPicker
     private lateinit var preferences: SharedPreferences
 
@@ -36,6 +38,8 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCurrencyBinding.inflate(inflater, container, false)
+        binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.viewModel = viewModel
         return binding.root
     }
 
@@ -51,7 +55,8 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
 
         preferences.registerOnSharedPreferenceChangeListener(this)
 
-        val selectedCurrency = preferences.getString("selectedCurrency", getString(R.string.default_currency))
+        val selectedCurrency =
+            preferences.getString("selectedCurrency", getString(R.string.default_currency))
         binding.selectedCurrencyPreferenceValue.text = selectedCurrency
         Toast.makeText(activity, selectedCurrency, Toast.LENGTH_LONG).show()
 
@@ -95,7 +100,8 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
     override fun onResume() {
         super.onResume()
         preferences.registerOnSharedPreferenceChangeListener(this)
-        binding.selectedCurrencyPreferenceValue.text = preferences.getString("selectedCurrency", "CZK")
+        binding.selectedCurrencyPreferenceValue.text =
+            preferences.getString("selectedCurrency", "CZK")
     }
 
     override fun onPause() {
@@ -109,12 +115,8 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
         symbol: String,
         flagDrawableResID: Int
     ) {
-        binding.run {
-            selectedCurrencyFlagImageView.setImageResource(flagDrawableResID)
-            selectedCurrencySymbolTextView.text = symbol
-            selectedCurrencyIsoTextView.text = code
-            selectedCurrencyNameTextView.text = name
-        }
+        getUserCurrencyInfo(code)
+        viewModel.
         currencyPicker.dismiss()
     }
 
@@ -128,10 +130,12 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
                 )
             }
             R.id.button_open_preferences -> {
-                startActivity(Intent(
-                    activity,
-                    CurrencySettingsActivity::class.java
-                ))
+                startActivity(
+                    Intent(
+                        activity,
+                        CurrencySettingsActivity::class.java
+                    )
+                )
             }
             R.id.button_open_fragment -> {
                 parentFragmentManager.commit {
@@ -142,20 +146,10 @@ class CurrencyFragment : Fragment(), View.OnClickListener, CurrencyPickerListene
         }
     }
 
-    private fun getUserCurrencyInfo(code: String) {
-        val currency = getCurrencyByISO(code)
-        if (currency != null) {
-            binding.run {
-                selectedCurrencyFlagImageView.setImageResource(currency.flag)
-                selectedCurrencySymbolTextView.text = currency.symbol
-                selectedCurrencyIsoTextView.text = currency.code
-                selectedCurrencyNameTextView.text = currency.name
-            }
-        }
-    }
 
     companion object {
-        @JvmStatic @JvmOverloads
+        @JvmStatic
+        @JvmOverloads
         fun newInstance(args: Bundle? = null) = CurrencyFragment().apply { arguments = args }
     }
 }
